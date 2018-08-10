@@ -5,7 +5,7 @@ copy env-example .env
 ```
 
 ```sh
-docker-compose up -d php-fpm7.2 php-fpm5.6 mysql nginx
+docker-compose up -d --no-deps php-fpm7.2 php-fpm5.6 mysql nginx 
 ```
 
 
