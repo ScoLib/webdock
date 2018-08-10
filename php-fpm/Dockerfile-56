@@ -301,12 +301,12 @@ RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
 #--------------------------------------------------------------------------
 #
 
-COPY ./php56.ini /usr/local/etc/php/
-COPY ./laravel.ini /usr/local/etc/php/conf.d
-COPY ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/
+# COPY ./php56.ini /usr/local/etc/php/
+# COPY ./laravel.ini /usr/local/etc/php/conf.d
+# COPY ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/
 
 
-RUN apk --no-cache add shadow && usermod -u 1000 www-data
+# RUN apk --no-cache add shadow && usermod -u 1000 www-data
 
 WORKDIR /var/www
 
