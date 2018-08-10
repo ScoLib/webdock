@@ -182,6 +182,5 @@ PHP_FPM_56_IMAGE_VERSION=1.0.0
 MYSQL_IMAGE_VERSION=1.0.0
 REDIS_IMAGE_VERSION=1.0.0
 MEMCACHED_IMAGE_VERSION=1.0.0
-BEANSTALKD_IMAGE_VERSION=1.0.0
 
 ########################################################################################################################

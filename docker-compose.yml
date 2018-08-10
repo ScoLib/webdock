@@ -311,8 +311,9 @@ services:
 ### Beanstalkd Container ####################################
 
     beanstalkd:
-      image: beanstalkd:${BEANSTALKD_IMAGE_VERSION}
-      build: ./beanstalkd
+      image: schickling/beanstalkd:latest
+      volumes:
+        - ${DATA_SAVE_PATH}/beanstalkd:/var/lib/beanstalkd/data
       ports:
         - "${BEANSTALKD_HOST_PORT}:11300"
       privileged: true
