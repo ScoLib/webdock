@@ -16,21 +16,18 @@ RUN apk update && \
         libpng-dev \
         freetype-dev \
         libmcrypt-dev \
-        zlib-dev
+        zlib-dev \
+        openssl-dev
 
-# Install the PHP pdo_mysql extention
-RUN docker-php-ext-install pdo_mysql
-    
-
-#####################################
-# gd:
-#####################################
-
-# Install the PHP gd library
-RUN docker-php-ext-configure gd \
+# Install the PHP mcrypt extention
+RUN docker-php-ext-install mcrypt \
+    # Install the PHP pdo_mysql extention
+    && docker-php-ext-install pdo_mysql \
+    # Install the PHP gd library
+    && docker-php-ext-configure gd \
         --with-jpeg-dir=/usr/lib \
-        --with-freetype-dir=/usr/include/freetype2 && \
-    docker-php-ext-install gd
+        --with-freetype-dir=/usr/include/freetype2 \
+    && docker-php-ext-install gd
 
 
 #####################################
