@@ -5,7 +5,7 @@ services:
 ### PHP-FPM 7.2 Container #######################################
 
     php-fpm7.2:
-      image: php-fpm72:${PHP_FPM_72_IMAGE_VERSION}
+      image: php-fpm:7.2
       build:
         context: ./php-fpm
         args:
@@ -48,7 +48,7 @@ services:
 ### PHP-FPM 7.1 Container #######################################
 
     php-fpm7.1:
-      image: php-fpm71:${PHP_FPM_71_IMAGE_VERSION}
+      image: php-fpm:7.1
       build:
         context: ./php-fpm
         args:
@@ -91,7 +91,7 @@ services:
 ### PHP-FPM 7.0 Container #######################################
 
     php-fpm7.0:
-      image: php-fpm70:${PHP_FPM_70_IMAGE_VERSION}
+      image: php-fpm:7.0
       build:
         context: ./php-fpm
         args:
@@ -134,7 +134,7 @@ services:
 ### PHP-FPM 5.6 Container #######################################
 
     php-fpm5.6:
-      image: php-fpm56:${PHP_FPM_56_IMAGE_VERSION}
+      image: php-fpm:5.6
       build:
         context: ./php-fpm
         args:
@@ -224,7 +224,7 @@ services:
 ### MySQL Container #########################################
 
     mysql:
-      image: mysql:${MYSQL_IMAGE_VERSION}
+      # image: mysql:${MYSQL_IMAGE_VERSION}
       build:
         context: ./mysql
         args:
@@ -287,8 +287,7 @@ services:
 ### Redis Container #########################################
 
     redis:
-      image: redis:${REDIS_IMAGE_VERSION}
-      build: ./redis
+      image: redis:latest
       volumes:
         - ${DATA_SAVE_PATH}/redis:/data
       ports:
@@ -299,7 +298,7 @@ services:
 ### Memcached Container #####################################
 
     memcached:
-      image: memcached:${MEMCACHED_IMAGE_VERSION}
+      # image: memcached:${MEMCACHED_IMAGE_VERSION}
       build: ./memcached
       volumes:
         - ${DATA_SAVE_PATH}/memcached:/var/lib/memcached
