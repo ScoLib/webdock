@@ -2,6 +2,8 @@ FROM php:7.0-fpm-alpine
 
 LABEL maintainer="klgd <slice1213@gmail.com>"
 
+RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+
 ARG CHANGE_SOURCE=false
 RUN if [ ${CHANGE_SOURCE} = true ]; then \
     # Change application source from dl-cdn.alpinelinux.org to aliyun source
@@ -9,15 +11,13 @@ RUN if [ ${CHANGE_SOURCE} = true ]; then \
 ;fi
 
 RUN apk update && \
-    # apk upgrade && \
     apk add --no-cache $PHPIZE_DEPS \
         curl \
         libjpeg-turbo-dev \
         libpng-dev \
         freetype-dev \
         libmcrypt-dev \
-        zlib-dev \
-        openssl-dev
+        zlib-dev
 
 # Install the PHP mcrypt extention
 RUN docker-php-ext-install mcrypt \
@@ -124,7 +124,7 @@ ARG INSTALL_AMQP=false
 RUN if [ ${INSTALL_AMQP} = true ]; then \
     apk update && \
     # apk upgrade && \
-    apk add --no-cache rabbitmq-c-dev && \
+    apk add --no-cache rabbitmq-c-dev@testing && \
     # Install the amqp extension
     pecl install amqp && \
     docker-php-ext-enable amqp \
