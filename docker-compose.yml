@@ -275,14 +275,14 @@ services:
 
 ### MongoDB Container #######################################
 
-    # mongo:
-    #   build: ./mongo
-    #   ports:
-    #     - "${MONGODB_PORT}:27017"
-    #   volumes:
-    #     - ${DATA_SAVE_PATH}/mongo:/data/db
-    #   networks:
-    #     - backend
+    mongo:
+      image: mongo:latest
+      ports:
+        - "${MONGODB_PORT}:27017"
+      # volumes:
+        # - ${DATA_SAVE_PATH}/mongo:/data/db
+      networks:
+        - backend
 
 ### Redis Container #########################################
 
@@ -321,11 +321,6 @@ services:
       ports:
         - "${BEANSTALKD_HOST_PORT}:11300"
       privileged: true
-      depends_on:
-        - php-fpm5.6
-        - php-fpm7.0
-        - php-fpm7.1
-        - php-fpm7.2
       networks:
         - backend
 
