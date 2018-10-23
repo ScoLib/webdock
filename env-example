@@ -17,14 +17,6 @@ PHP_INTERPRETER=php-fpm
 
 DATA_SAVE_PATH=~/.webdock/data
 
-### Docker compose files ###############################################################################################
-# Select which docker-compose files to include.
-# If using docker-sync. Set the value to: docker-compose.yml:docker-compose.dev.yml:docker-compose.sync.yml
-# Change the separator from : to ; on Windows
-
-COMPOSE_PATH_SEPARATOR=:
-COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml
-
 ### Docker Host IP #####################################################################################################
 # Enter your Docker Host IP (will be appended to /etc/hosts). Default is `10.0.75.1`
 
