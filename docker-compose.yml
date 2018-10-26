@@ -281,6 +281,10 @@ services:
         - "${MONGODB_PORT}:27017"
       volumes:
         - ${DATA_SAVE_PATH}/mongo:/data/db
+      environment: 
+        # - MONGO_INITDB_DATABASE=leanote
+        - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
+        - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
       networks:
         - backend
 
@@ -484,8 +488,8 @@ services:
       image: scolib/leanote:latest
       volumes:
         - ${LEANOTE_DATA_PATH}/conf/app.conf:/usr/local/leanote/conf/app.conf
-        - ${LEANOTE_DATA_PATH}/files:/usr/local/leanote/files
-        - ${LEANOTE_DATA_PATH}/upload:/usr/local/leanote/public/upload
+        # - ${LEANOTE_DATA_PATH}/files:/usr/local/leanote/files
+        # - ${LEANOTE_DATA_PATH}/upload:/usr/local/leanote/public/upload
         # - ${LEANOTE_DATA_PATH}/mongodb_backup:/usr/local/leanote/mongodb_backup
         - ${LEANOTE_DATA_PATH}/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       expose:

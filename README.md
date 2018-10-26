@@ -1,16 +1,9 @@
 # webdock
 
 ```sh
-copy env-example .env
-```
-
-```sh
+cp env-example .env
 docker-compose up -d --no-deps php-fpm7.2 php-fpm5.6 mysql nginx 
-```
-
-
-```sh
-docker-compose build --force-rm php-fpm5.6
+# docker-compose build --force-rm php-fpm5.6
 ```
 
 ## Xdebug
@@ -28,7 +21,19 @@ xdebug.remote_connect_back=0 # 关闭
 
 ## MongoDB
 
-须知：Window下使用时，使用 volumes 映射宿主机目录到 `/data/db`，会报如下错误：
+### 默认开启用户权限
+
+用户名： `mongo` 
+
+密码： `mongo`
+
+可以在 `.env` 里修改
+
+
+
+### Window 下 volumes 报错
+
+Window下使用时，使用 volumes 映射宿主机目录到 `/data/db`，会报如下错误：
 
 ```sh
 2018-10-22T05:54:58.004+0000 I CONTROL  [main] Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'
@@ -61,19 +66,27 @@ xdebug.remote_connect_back=0 # 关闭
 
 原因见： https://stackoverflow.com/questions/42756776/how-do-i-configure-mongo-to-run-in-docker-to-using-an-external-drive-on-windows
 
-**目前只能暂时不用 volumes** 
+**目前Windows只能暂时不用 volumes** 
 
 
 
 ## Leanote
 
-首次使用时，需要导入leanote数据库
+### 导入数据库
+
+首次使用时，需要导入 `leanote` 的数据库
 
 ```sh
-cat <<<EOF > dir/docker-entrypoint-initdb.d/init.sh
-#!/usr/bin
-mongorestore -h mongo -d leanote --dir /usr/local/leanote/mongodb_backup/leanote_install_data/
-<<<EOF
-
+cp ./leanote/docker-entrypoint-initdb.d/init.sh.example ./leanote/docker-entrypoint-initdb.d/init.sh
 ```
+
+**注意**：如果 docker-compose.yml 中映射了 mongodb_backup，请手动将 leanote_install_data 目录放到 宿主目录里，否则会导入失败
+
+### 映射配置
+
+```sh
+cp ./leanote/conf/app.conf.example ./leanote/conf/app.conf
+```
+
+并根据自己实际情况修改
 
