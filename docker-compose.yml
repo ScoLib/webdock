@@ -283,8 +283,8 @@ services:
         - ${DATA_SAVE_PATH}/mongo:/data/db
       environment: 
         # - MONGO_INITDB_DATABASE=leanote
-        - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
-        - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
+        # - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
+        # - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
       networks:
         - backend
 

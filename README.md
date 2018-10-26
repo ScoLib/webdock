@@ -21,16 +21,6 @@ xdebug.remote_connect_back=0 # 关闭
 
 ## MongoDB
 
-### 默认开启用户权限
-
-用户名： `mongo` 
-
-密码： `mongo`
-
-可以在 `.env` 里修改
-
-
-
 ### Window 下 volumes 报错
 
 Window下使用时，使用 volumes 映射宿主机目录到 `/data/db`，会报如下错误：
