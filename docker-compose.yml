@@ -277,11 +277,13 @@ services:
 
     mongo:
       image: mongo:latest
-      ports:
-        - "${MONGODB_PORT}:27017"
+      # ports:
+        # - "${MONGODB_PORT}:27017"
+      expose:
+        - "27017"
       volumes:
         - ${DATA_SAVE_PATH}/mongo:/data/db
-      environment: 
+      # environment: 
         # - MONGO_INITDB_DATABASE=leanote
         # - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
         # - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
