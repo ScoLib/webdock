@@ -478,6 +478,23 @@ services:
     #   networks:
     #     - backend
 
+### Leanote Container #########################################
+
+    leanote:
+      image: scolib/leanote:latest
+      volumes:
+        - ${LEANOTE_DATA_PATH}/conf/app.conf:/usr/local/leanote/conf/app.conf
+        - ${LEANOTE_DATA_PATH}/files:/usr/local/leanote/files
+        - ${LEANOTE_DATA_PATH}/upload:/usr/local/leanote/public/upload
+        # - ${LEANOTE_DATA_PATH}/mongodb_backup:/usr/local/leanote/mongodb_backup
+        - ${LEANOTE_DATA_PATH}/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      expose:
+        - "9000"
+      depends_on:
+        - mongo
+      networks:
+        - backend
+
 ### Networks Setup ############################################
 
 networks:

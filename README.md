@@ -62,3 +62,18 @@ xdebug.remote_connect_back=0 # 关闭
 原因见： https://stackoverflow.com/questions/42756776/how-do-i-configure-mongo-to-run-in-docker-to-using-an-external-drive-on-windows
 
 **目前只能暂时不用 volumes** 
+
+
+
+## Leanote
+
+首次使用时，需要导入leanote数据库
+
+```sh
+cat <<<EOF > dir/docker-entrypoint-initdb.d/init.sh
+#!/usr/bin
+mongorestore -h mongo -d leanote --dir /usr/local/leanote/mongodb_backup/leanote_install_data/
+<<<EOF
+
+```
+
