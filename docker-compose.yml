@@ -283,6 +283,7 @@ services:
 
     mongo:
       image: mongo:latest
+      restart: always
       # ports:
         # - "${MONGODB_PORT}:27017"
       expose:
