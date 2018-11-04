@@ -311,17 +311,12 @@ services:
 ### Memcached Container #####################################
 
     memcached:
-      # image: memcached:${MEMCACHED_IMAGE_VERSION}
-      build: ./memcached
+      image: memcached:latest
+      # build: ./memcached
       volumes:
         - ${DATA_SAVE_PATH}/memcached:/var/lib/memcached
       ports:
         - "${MEMCACHED_HOST_PORT}:11211"
-      depends_on:
-        - php-fpm5.6
-        - php-fpm7.0
-        - php-fpm7.1
-        - php-fpm7.2
       networks:
         - backend
 
@@ -506,6 +501,40 @@ services:
         - "9000"
       depends_on:
         - mongo
+      networks:
+        - backend
+
+### Seafile Pro Container #########################################
+
+    seafile-pro:
+      image: scolib/seafile-pro
+      # build: ./seafile-pro
+      environment: 
+        - SERVER_NAME=${SEAFILE_SERVER_NAME}
+        - SERVER_IP=${SEAFILE_SERVER_IP}
+        - ENABLE_CRON_GC=${SEAFILE_ENABLE_CRON_GC}
+        - SEAFILE_ADMIN_MAIL=${SEAFILE_SEAFILE_ADMIN_MAIL}
+        - SEAFILE_ADMIN_PASS=${SEAFILE_SEAFILE_ADMIN_PASS}
+        - DATABASE_TYPE=${SEAFILE_DATABASE_TYPE}
+        - MYSQL_ROOT_PASSWD=${SEAFILE_MYSQL_ROOT_PASSWD}
+        - MYSQL_HOST=${SEAFILE_MYSQL_HOST}
+        - MYSQL_PORT=${SEAFILE_MYSQL_PORT}
+        - MYSQL_USER=${SEAFILE_MYSQL_USER}
+        - MYSQL_USER_PASSWD=${SEAFILE_MYSQL_USER_PASSWD}
+        # - MYSQL_USER_HOST=
+        # - DB_PREFIX=
+        # - CCNET_DB=
+        # - SEAFILE_DB=
+        # - SEAHUB_DB=
+      volumes:
+        - ${SEAFILE_DATA_PATH}:/data
+      expose:
+        - "8000"
+        - "8082"
+        - "8080"
+      depends_on:
+        - mysql
+        - memcache
       networks:
         - backend
 

@@ -172,4 +172,21 @@ GRAFANA_PORT=3000
 LEANOTE_DATA_PATH=./leanote
 LEANOTE_PORT=9000
 
+### SEAFILE-PRO ########################################################################################################
+
+SEAFILE_DATA_PATH=./seafile
+SEAFILE_SERVER_NAME=seafile
+SEAFILE_SERVER_IP=example.com
+SEAFILE_ENABLE_CRON_GC=1
+SEAFILE_SEAFILE_ADMIN_MAIL=admin@seahub.com
+SEAFILE_SEAFILE_ADMIN_PASS=pass
+
+# Accepted values: sqlite - mysql
+SEAFILE_DATABASE_TYPE=mysql
+SEAFILE_MYSQL_ROOT_PASSWD=root
+SEAFILE_MYSQL_HOST=mysql
+SEAFILE_MYSQL_PORT=3306
+SEAFILE_MYSQL_USER=seafile
+SEAFILE_MYSQL_USER_PASSWD=seafile
+
 ########################################################################################################################
