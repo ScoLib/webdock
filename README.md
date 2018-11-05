@@ -80,3 +80,129 @@ cp ./leanote/conf/app.conf.example ./leanote/conf/app.conf
 
 并根据自己实际情况修改
 
+### Nginx 代理
+
+```sh
+server {
+
+    listen 80;
+
+    server_name leanote.lo;
+
+    location / {
+        proxy_pass  http://leanote:9000;
+        #Proxy Settings
+        proxy_redirect     off;
+        proxy_set_header   Host             $host;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_next_upstream error  invalid_header http_500 http_502 http_503 http_504;
+        proxy_max_temp_file_size 0;
+        proxy_intercept_errors on;
+        proxy_connect_timeout      90;
+        proxy_send_timeout         90;
+        proxy_read_timeout         90;
+        proxy_buffering on;
+        proxy_buffer_size          128k;
+        proxy_buffers              8 128k;
+        proxy_busy_buffers_size    256k;
+        proxy_temp_file_write_size 1024k;
+    }
+
+    error_log /var/log/nginx/leanote_error.log;
+    access_log /var/log/nginx/leanote_access.log;
+}
+```
+
+### MongoDB tool 地址
+
+后台指定mongodb 地址
+
+```sh
+/usr/bin/mongodump
+/usr/bin/mongorestore
+```
+
+### Wkhtmltopdf 地址
+
+```sh
+/usr/bin/wkhtmltopdf
+```
+
+
+
+## Seafile Pro
+
+
+
+### Nginx 代理
+
+```sh
+server {
+	listen			80;
+	server_name		seafile.lo;
+
+	access_log		off;
+	error_log		stderr;
+
+	location / {
+		proxy_pass          http://seafile-pro:8000;
+		proxy_redirect      off;
+		proxy_set_header    Host $host;
+		# possibly change/remove next lines to fix wrong ip being shown behind nginx -> seafile
+		proxy_set_header    X-Real-IP $remote_addr;
+		proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header    X-Forwarded-Host $server_name;
+	}
+
+	# only needed when running behind fast-cgi and serving assets via nginx
+	#location /media {
+	#    root /seafile/server/seahub;
+	#}
+
+	location /seafhttp {
+		rewrite ^/seafhttp(.*)$ $1 break;
+		proxy_pass http://seafile-pro:8082;
+		client_max_body_size 0;
+		proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_request_buffering off;
+    proxy_connect_timeout  36000s;
+    proxy_read_timeout  36000s;
+    proxy_send_timeout  36000s;
+
+    send_timeout  36000s;
+	}
+
+	location /seafdav {
+		#rewrite ^/seafdav(.*)$ $1 break;
+		#proxy_pass http://seafile-pro:8080;
+		#client_max_body_size 0;
+    fastcgi_pass    seafile-pro:8080;
+    fastcgi_param   SCRIPT_FILENAME     $document_root$fastcgi_script_name;
+    fastcgi_param   PATH_INFO           $fastcgi_script_name;
+
+    fastcgi_param   SERVER_PROTOCOL     $server_protocol;
+    fastcgi_param   QUERY_STRING        $query_string;
+    fastcgi_param   REQUEST_METHOD      $request_method;
+    fastcgi_param   CONTENT_TYPE        $content_type;
+    fastcgi_param   CONTENT_LENGTH      $content_length;
+    fastcgi_param   SERVER_ADDR         $server_addr;
+    fastcgi_param   SERVER_PORT         $server_port;
+    fastcgi_param   SERVER_NAME         $server_name;
+
+    client_max_body_size 0;
+    proxy_connect_timeout  36000s;
+    proxy_read_timeout  36000s;
+    proxy_send_timeout  36000s;
+    send_timeout  36000s;
+
+    # This option is only available for Nginx >= 1.8.0. See more details below.
+    proxy_request_buffering off;
+
+    access_log      /var/log/nginx/seafdav.access.log;
+    error_log       /var/log/nginx/seafdav.error.log;	
+	}
+
+}
+```
+

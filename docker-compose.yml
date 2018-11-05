@@ -534,7 +534,7 @@ services:
         - "8080"
       depends_on:
         - mysql
-        - memcache
+        - memcached
       networks:
         - backend
 
