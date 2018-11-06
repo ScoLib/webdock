@@ -1,2 +1,0 @@
-#!/usr/bin
-mongorestore -h mongo -d leanote --dir /usr/local/leanote/mongodb_backup/leanote_install_data/

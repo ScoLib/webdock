@@ -169,8 +169,11 @@ GRAFANA_PORT=3000
 
 ### LEANOTE ############################################################################################################
 
-LEANOTE_DATA_PATH=./leanote
-LEANOTE_PORT=9000
+LEANOTE_DATA_PATH=../leanote
+LEANOTE_SITE_URL=http://localhost:9000
+LEANOTE_MONGO_HOST=mongo
+LEANOTE_MONGO_PORT=27017
+LEANOTE_MONGO_DATABASE=leanote
 
 ### SEAFILE-PRO ########################################################################################################
 

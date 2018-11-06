@@ -490,13 +490,18 @@ services:
 
     leanote:
       image: scolib/leanote:latest
+      # build: ./alpine-leanote
       restart: always
+      environment: 
+        - LEANOTE_SITE_URL=${LEANOTE_SITE_URL}
+        - LEANOTE_MONGO_HOST=${LEANOTE_MONGO_HOST}
+        - LEANOTE_MONGO_PORT=${LEANOTE_MONGO_PORT}
+        - LEANOTE_MONGO_DATABASE=${LEANOTE_MONGO_DATABASE}
       volumes:
-        - ${LEANOTE_DATA_PATH}/conf/app.conf:/usr/local/leanote/conf/app.conf
-        - ${LEANOTE_DATA_PATH}/files:/usr/local/leanote/files
-        - ${LEANOTE_DATA_PATH}/upload:/usr/local/leanote/public/upload
-        # - ${LEANOTE_DATA_PATH}/mongodb_backup:/usr/local/leanote/mongodb_backup
-        - ${LEANOTE_DATA_PATH}/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        - ${LEANOTE_DATA_PATH}/conf/app.conf:/data/conf/app.conf
+        - ${LEANOTE_DATA_PATH}/files:/data/files
+        - ${LEANOTE_DATA_PATH}/upload:/data/upload
+        - ${LEANOTE_DATA_PATH}/mongodb_backup:/data/mongodb_backup
       expose:
         - "9000"
       depends_on:
@@ -507,8 +512,9 @@ services:
 ### Seafile Pro Container #########################################
 
     seafile-pro:
-      image: scolib/seafile-pro
-      # build: ./seafile-pro
+      image: scolib/seafile-pro:latest
+      # build: ./phusion-seafile-pro
+      restart: always
       environment: 
         - SERVER_NAME=${SEAFILE_SERVER_NAME}
         - SERVER_IP=${SEAFILE_SERVER_IP}
