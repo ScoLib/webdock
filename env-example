@@ -2,19 +2,15 @@
 # General Setup
 ###########################################################
 
-### Application Path ###################################################################################################
-# Point to your code, will be available at `/var/www`.
+### Paths #################################################
 
-APPLICATION=../
+# Point to the path of your applications code on your host
+APP_CODE_PATH_HOST=../
 
-### PHP Interpreter ####################################################################################################
-# Select the PHP Interpreter. Accepted values: hhvm - php-fpm
+# Point to where the `APP_CODE_PATH_HOST` should be in the container. You may add flags to the path `:cached`, `:delegated`. When using Docker Sync add `:nocopy`
+APP_CODE_PATH_CONTAINER=/var/www
 
-PHP_INTERPRETER=php-fpm
-
-### Data Path ##########################################################################################################
-# Choose storage path on your machine. For all storage systems.
-
+# Choose storage path on your machine. For all storage systems
 DATA_SAVE_PATH=~/.webdock/data
 
 ### Docker Host IP #####################################################################################################

@@ -36,7 +36,7 @@ services:
       volumes:
         - ./php-fpm/php72.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
-        - ${APPLICATION}:/var/www
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
       extra_hosts:
@@ -80,7 +80,7 @@ services:
       volumes:
         - ./php-fpm/php71.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
-        - ${APPLICATION}:/var/www
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
       extra_hosts:
@@ -124,7 +124,7 @@ services:
       volumes:
         - ./php-fpm/php70.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
-        - ${APPLICATION}:/var/www
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
       extra_hosts:
@@ -168,7 +168,7 @@ services:
       volumes:
         - ./php-fpm/php56.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
-        - ${APPLICATION}:/var/www
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
       extra_hosts:
@@ -189,7 +189,7 @@ services:
         - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
         - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
         - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
-        - ${APPLICATION}:/var/www
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       ports:
         - "${NGINX_HOST_HTTP_PORT}:80"
         - "${NGINX_HOST_HTTPS_PORT}:443"
@@ -445,17 +445,17 @@ services:
 
 ### Certbot Container ##################################
 
-    # certbot:
-    #   build:
-    #     context: ./certbot
-    #   volumes:
-    #     - ./data/certbot/certs/:/var/certs
-    #     - ./certbot/letsencrypt/:/var/www/letsencrypt
-    #   environment:
-    #     - CN="fake.domain.com"
-    #     - EMAIL="fake.email@gmail.com"
-    #   networks:
-    #     - frontend
+    certbot:
+      build:
+        context: ./certbot
+      volumes:
+        - ./certbot/etc/letsencrypt:/etc/letsencrypt
+        - ./certbot/letsencrypt/:${APP_CODE_PATH_CONTAINER}/letsencrypt
+      environment:
+        - CN=domain.com
+        - EMAIL=admin@domain.com
+      networks:
+        - frontend
 
 ### Jenkins ###################################################
 

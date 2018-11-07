@@ -6,3 +6,5 @@
 .docker-sync
 /jenkins/jenkins_home
 /.vscode
+/phusion-seafile-pro
+/alpine-leanote
