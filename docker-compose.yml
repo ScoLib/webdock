@@ -449,7 +449,7 @@ services:
       build:
         context: ./certbot
       volumes:
-        - ./certbot/etc/letsencrypt:/etc/letsencrypt
+        - ./certbot/etc:/etc/letsencrypt
         - ./certbot/letsencrypt/:${APP_CODE_PATH_CONTAINER}/letsencrypt
       environment:
         - CN=${CERTBOT_CN}
