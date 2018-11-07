@@ -188,4 +188,9 @@ SEAFILE_MYSQL_PORT=3306
 SEAFILE_MYSQL_USER=seafile
 SEAFILE_MYSQL_USER_PASSWD=seafile
 
+### CERTBOT ########################################################################################################
+
+CERTBOT_CN=domain.com
+CERTBOT_EMAIL=admin@domain.com
+
 ########################################################################################################################

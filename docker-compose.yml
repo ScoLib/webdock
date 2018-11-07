@@ -452,8 +452,8 @@ services:
         - ./certbot/etc/letsencrypt:/etc/letsencrypt
         - ./certbot/letsencrypt/:${APP_CODE_PATH_CONTAINER}/letsencrypt
       environment:
-        - CN=domain.com
-        - EMAIL=admin@domain.com
+        - CN=${CERTBOT_CN}
+        - EMAIL=${CERTBOT_EMAIL}
       networks:
         - frontend
 
