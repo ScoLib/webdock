@@ -10,17 +10,13 @@ services:
       build:
         context: ./php-fpm
         args:
+          - WEBDOCK_PHP_VERSION=7.2
           - INSTALL_XDEBUG=${PHP_FPM_INSTALL_XDEBUG}
           - INSTALL_SOAP=${PHP_FPM_INSTALL_SOAP}
           - INSTALL_MONGO=${PHP_FPM_INSTALL_MONGO}
           - INSTALL_AMQP=${PHP_FPM_INSTALL_AMQP}
-          - INSTALL_ZIP_ARCHIVE=${PHP_FPM_INSTALL_ZIP_ARCHIVE}
-          - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
           - INSTALL_GMP=${PHP_FPM_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM_INSTALL_PHPREDIS}
-          - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
-          - INSTALL_OPCACHE=${PHP_FPM_INSTALL_OPCACHE}
-          - INSTALL_EXIF=${PHP_FPM_INSTALL_EXIF}
           - INSTALL_MYSQLI=${PHP_FPM_INSTALL_MYSQLI}
           - INSTALL_PGSQL=${PHP_FPM_INSTALL_PGSQL}
           - INSTALL_PG_CLIENT=${PHP_FPM_INSTALL_PG_CLIENT}
@@ -31,11 +27,11 @@ services:
           - INSTALL_SWOOLE=${PHP_FPM_INSTALL_SWOOLE}
           - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM_INSTALL_IMAGE_OPTIMIZERS}
           - INSTALL_IMAGEMAGICK=${PHP_FPM_INSTALL_IMAGEMAGICK}
-          - CHANGE_SOURCE=${CHANGE_SOURCE}
-        dockerfile: "Dockerfile-72"
+          - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
+          - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
       volumes:
-        - ./php-fpm/php72.ini:/usr/local/etc/php/php.ini
-        - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+        # - ./php-fpm/php72.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
@@ -54,17 +50,13 @@ services:
       build:
         context: ./php-fpm
         args:
+          - WEBDOCK_PHP_VERSION=7.1
           - INSTALL_XDEBUG=${PHP_FPM_INSTALL_XDEBUG}
           - INSTALL_SOAP=${PHP_FPM_INSTALL_SOAP}
           - INSTALL_MONGO=${PHP_FPM_INSTALL_MONGO}
           - INSTALL_AMQP=${PHP_FPM_INSTALL_AMQP}
-          - INSTALL_ZIP_ARCHIVE=${PHP_FPM_INSTALL_ZIP_ARCHIVE}
-          - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
           - INSTALL_GMP=${PHP_FPM_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM_INSTALL_PHPREDIS}
-          - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
-          - INSTALL_OPCACHE=${PHP_FPM_INSTALL_OPCACHE}
-          - INSTALL_EXIF=${PHP_FPM_INSTALL_EXIF}
           - INSTALL_MYSQLI=${PHP_FPM_INSTALL_MYSQLI}
           - INSTALL_PGSQL=${PHP_FPM_INSTALL_PGSQL}
           - INSTALL_PG_CLIENT=${PHP_FPM_INSTALL_PG_CLIENT}
@@ -75,11 +67,11 @@ services:
           - INSTALL_SWOOLE=${PHP_FPM_INSTALL_SWOOLE}
           - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM_INSTALL_IMAGE_OPTIMIZERS}
           - INSTALL_IMAGEMAGICK=${PHP_FPM_INSTALL_IMAGEMAGICK}
-          - CHANGE_SOURCE=${CHANGE_SOURCE}
-        dockerfile: "Dockerfile-71"
+          - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
+          - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
       volumes:
-        - ./php-fpm/php71.ini:/usr/local/etc/php/php.ini
-        - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+        # - ./php-fpm/php71.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
@@ -98,17 +90,13 @@ services:
       build:
         context: ./php-fpm
         args:
+          - WEBDOCK_PHP_VERSION=7.0
           - INSTALL_XDEBUG=${PHP_FPM_INSTALL_XDEBUG}
           - INSTALL_SOAP=${PHP_FPM_INSTALL_SOAP}
           - INSTALL_MONGO=${PHP_FPM_INSTALL_MONGO}
           - INSTALL_AMQP=${PHP_FPM_INSTALL_AMQP}
-          - INSTALL_ZIP_ARCHIVE=${PHP_FPM_INSTALL_ZIP_ARCHIVE}
-          - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
           - INSTALL_GMP=${PHP_FPM_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM_INSTALL_PHPREDIS}
-          - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
-          - INSTALL_OPCACHE=${PHP_FPM_INSTALL_OPCACHE}
-          - INSTALL_EXIF=${PHP_FPM_INSTALL_EXIF}
           - INSTALL_MYSQLI=${PHP_FPM_INSTALL_MYSQLI}
           - INSTALL_PGSQL=${PHP_FPM_INSTALL_PGSQL}
           - INSTALL_PG_CLIENT=${PHP_FPM_INSTALL_PG_CLIENT}
@@ -119,11 +107,11 @@ services:
           - INSTALL_SWOOLE=${PHP_FPM_INSTALL_SWOOLE}
           - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM_INSTALL_IMAGE_OPTIMIZERS}
           - INSTALL_IMAGEMAGICK=${PHP_FPM_INSTALL_IMAGEMAGICK}
-          - CHANGE_SOURCE=${CHANGE_SOURCE}
-        dockerfile: "Dockerfile-70"
+          - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
+          - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
       volumes:
-        - ./php-fpm/php70.ini:/usr/local/etc/php/php.ini
-        - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+        # - ./php-fpm/php70.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
@@ -142,17 +130,13 @@ services:
       build:
         context: ./php-fpm
         args:
+          - WEBDOCK_PHP_VERSION=5.6
           - INSTALL_XDEBUG=${PHP_FPM_INSTALL_XDEBUG}
           - INSTALL_SOAP=${PHP_FPM_INSTALL_SOAP}
           - INSTALL_MONGO=${PHP_FPM_INSTALL_MONGO}
           - INSTALL_AMQP=${PHP_FPM_INSTALL_AMQP}
-          - INSTALL_ZIP_ARCHIVE=${PHP_FPM_INSTALL_ZIP_ARCHIVE}
-          - INSTALL_BCMATH=${PHP_FPM_INSTALL_BCMATH}
           - INSTALL_GMP=${PHP_FPM_INSTALL_GMP}
           - INSTALL_PHPREDIS=${PHP_FPM_INSTALL_PHPREDIS}
-          - INSTALL_MEMCACHED=${PHP_FPM_INSTALL_MEMCACHED}
-          - INSTALL_OPCACHE=${PHP_FPM_INSTALL_OPCACHE}
-          - INSTALL_EXIF=${PHP_FPM_INSTALL_EXIF}
           - INSTALL_MYSQLI=${PHP_FPM_INSTALL_MYSQLI}
           - INSTALL_PGSQL=${PHP_FPM_INSTALL_PGSQL}
           - INSTALL_PG_CLIENT=${PHP_FPM_INSTALL_PG_CLIENT}
@@ -163,11 +147,11 @@ services:
           - INSTALL_SWOOLE=${PHP_FPM_INSTALL_SWOOLE}
           - INSTALL_IMAGE_OPTIMIZERS=${PHP_FPM_INSTALL_IMAGE_OPTIMIZERS}
           - INSTALL_IMAGEMAGICK=${PHP_FPM_INSTALL_IMAGEMAGICK}
-          - CHANGE_SOURCE=${CHANGE_SOURCE}
-        dockerfile: "Dockerfile-56"
+          - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
+          - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
       volumes:
-        - ./php-fpm/php56.ini:/usr/local/etc/php/php.ini
-        - ./php-fpm/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+        # - ./php-fpm/php56.ini:/usr/local/etc/php/php.ini
+        - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       expose:
         - "9000"
@@ -334,23 +318,18 @@ services:
 
 ### RabbitMQ Container ######################################
 
-    # rabbitmq:
-    #   build: ./rabbitmq
-    #   ports:
-    #     - "${RABBITMQ_NODE_HOST_PORT}:5672"
-    #     - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
-    #     - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
-    #   privileged: true
-    #   environment:
-    #     - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-    #     - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-    #   depends_on:
-    #     - php-fpm5.6
-    #     - php-fpm7.0
-    #     - php-fpm7.1
-    #     - php-fpm7.2
-    #   networks:
-    #     - backend
+    rabbitmq:
+      build: ./rabbitmq
+      ports:
+        - "${RABBITMQ_NODE_HOST_PORT}:5672"
+        - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
+        - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
+      privileged: true
+      environment:
+        - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+        - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      networks:
+        - backend
 
 ### Beanstalkd Console Container ############################
 
