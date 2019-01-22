@@ -319,7 +319,10 @@ services:
 ### RabbitMQ Container ######################################
 
     rabbitmq:
-      build: ./rabbitmq
+      build:
+        context: ./rabbitmq
+        args: 
+          - INSTALL_DELAY_PLUGIN=${RABBITMQ_INSTALL_DELAY_PLUGIN}
       ports:
         - "${RABBITMQ_NODE_HOST_PORT}:5672"
         - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
