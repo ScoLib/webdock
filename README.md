@@ -139,70 +139,186 @@ server {
 
 ```sh
 server {
-	listen			80;
-	server_name		seafile.lo;
+    listen            80;
+    server_name       seafile.lo;
 
-	access_log		off;
-	error_log		stderr;
+    access_log        off;
+    error_log         stderr;
 
-	location / {
-		proxy_pass          http://seafile-pro:8000;
-		proxy_redirect      off;
-		proxy_set_header    Host $host;
-		# possibly change/remove next lines to fix wrong ip being shown behind nginx -> seafile
-		proxy_set_header    X-Real-IP $remote_addr;
-		proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
-		proxy_set_header    X-Forwarded-Host $server_name;
-	}
+    location / {
+        proxy_pass          http://seafile-pro:8000;
+        proxy_redirect      off;
+        proxy_set_header    Host $host;
+        # possibly change/remove next lines to fix wrong ip being shown behind nginx -> seafile
+        proxy_set_header    X-Real-IP $remote_addr;
+        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Host $server_name;
+    }
 
-	# only needed when running behind fast-cgi and serving assets via nginx
-	#location /media {
-	#    root /seafile/server/seahub;
-	#}
+    # only needed when running behind fast-cgi and serving assets via nginx
+    #location /media {
+    #    root /seafile/server/seahub;
+    #}
 
-	location /seafhttp {
-		rewrite ^/seafhttp(.*)$ $1 break;
-		proxy_pass http://seafile-pro:8082;
-		client_max_body_size 0;
-		proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_request_buffering off;
-    proxy_connect_timeout  36000s;
-    proxy_read_timeout  36000s;
-    proxy_send_timeout  36000s;
+    location /seafhttp {
+        rewrite ^/seafhttp(.*)$ $1 break;
+        proxy_pass http://seafile-pro:8082;
+        client_max_body_size 0;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_request_buffering off;
+        proxy_connect_timeout  36000s;
+        proxy_read_timeout  36000s;
+        proxy_send_timeout  36000s;
 
-    send_timeout  36000s;
-	}
+        send_timeout  36000s;
+    }
 
-	location /seafdav {
-		#rewrite ^/seafdav(.*)$ $1 break;
-		#proxy_pass http://seafile-pro:8080;
-		#client_max_body_size 0;
-    fastcgi_pass    seafile-pro:8080;
-    fastcgi_param   SCRIPT_FILENAME     $document_root$fastcgi_script_name;
-    fastcgi_param   PATH_INFO           $fastcgi_script_name;
+    location /seafdav {
+        #rewrite ^/seafdav(.*)$ $1 break;
+        #proxy_pass http://seafile-pro:8080;
+        #client_max_body_size 0;
+        fastcgi_pass    seafile-pro:8080;
+        fastcgi_param   SCRIPT_FILENAME     $document_root$fastcgi_script_name;
+        fastcgi_param   PATH_INFO           $fastcgi_script_name;
 
-    fastcgi_param   SERVER_PROTOCOL     $server_protocol;
-    fastcgi_param   QUERY_STRING        $query_string;
-    fastcgi_param   REQUEST_METHOD      $request_method;
-    fastcgi_param   CONTENT_TYPE        $content_type;
-    fastcgi_param   CONTENT_LENGTH      $content_length;
-    fastcgi_param   SERVER_ADDR         $server_addr;
-    fastcgi_param   SERVER_PORT         $server_port;
-    fastcgi_param   SERVER_NAME         $server_name;
+        fastcgi_param   SERVER_PROTOCOL     $server_protocol;
+        fastcgi_param   QUERY_STRING        $query_string;
+        fastcgi_param   REQUEST_METHOD      $request_method;
+        fastcgi_param   CONTENT_TYPE        $content_type;
+        fastcgi_param   CONTENT_LENGTH      $content_length;
+        fastcgi_param   SERVER_ADDR         $server_addr;
+        fastcgi_param   SERVER_PORT         $server_port;
+        fastcgi_param   SERVER_NAME         $server_name;
 
-    client_max_body_size 0;
-    proxy_connect_timeout  36000s;
-    proxy_read_timeout  36000s;
-    proxy_send_timeout  36000s;
-    send_timeout  36000s;
+        client_max_body_size 0;
+        proxy_connect_timeout  36000s;
+        proxy_read_timeout  36000s;
+        proxy_send_timeout  36000s;
+        send_timeout  36000s;
 
-    # This option is only available for Nginx >= 1.8.0. See more details below.
-    proxy_request_buffering off;
+        # This option is only available for Nginx >= 1.8.0. See more details below.
+        proxy_request_buffering off;
 
-    access_log      /var/log/nginx/seafdav.access.log;
-    error_log       /var/log/nginx/seafdav.error.log;	
-	}
+        access_log      /var/log/nginx/seafdav.access.log;
+        error_log       /var/log/nginx/seafdav.error.log;    
+    }
 
+}
+```
+
+
+## Tideways
+
+### 启动 Tideways Daemon容器
+
+```sh
+docker-compose up -d tideways
+```
+
+### 开启 Tideways PHP扩展
+
+> https://github.com/tideways/php-xhprof-extension.git
+
+```sh
+# vim .env
+PHP_FPM_INSTALL_TIDEWAYS=true
+# 重新build php-fpm
+```
+
+### 安装 xhgui
+
+> 需要 MongoDB 支持
+
+#### 安装
+
+```sh
+git clone https://github.com/laynefyc/xhgui-branch.git
+cd xhgui-branch
+composer install --prefer-dist
+# xhgui-branch/cache 需要777权限
+```
+
+#### 配置
+
+`/config/config.default.php`
+
+```php
+    /*
+     * support extension: uprofiler, tideways_xhprof, tideways, xhprof
+     * default: xhprof
+     */
+    'extension' => 'tideways',
+
+    // Can be either mongodb or file.
+    /*
+    'save.handler' => 'file',
+    'save.handler.filename' => dirname(__DIR__) . '/cache/' . 'xhgui.data.' . microtime(true) . '_' . substr(md5($url), 0, 6),
+    */
+    'save.handler' => 'mongodb',
+
+    // Needed for file save handler. Beware of file locking. You can adujst this file path
+    // to reduce locking problems (eg uniqid, time ...)
+    //'save.handler.filename' => __DIR__.'/../data/xhgui_'.date('Ymd').'.dat',
+    'db.host' => 'mongodb://mongo:27017',
+    'db.db' => 'xhprof',
+```
+
+#### MongoDB优化
+
+```sh
+$ mongo
+> use xhprof
+> db.results.ensureIndex( { 'meta.SERVER.REQUEST_TIME' : -1 } )
+> db.results.ensureIndex( { 'profile.main().wt' : -1 } )
+> db.results.ensureIndex( { 'profile.main().mu' : -1 } )
+> db.results.ensureIndex( { 'profile.main().cpu' : -1 } )
+> db.results.ensureIndex( { 'meta.url' : 1 } )
+```
+
+#### Nginx
+
+一是添加PHP_VALUE，告诉PHP程序在执行前要调用服务
+
+**注意：该参数是影响php-fpm全局的**
+
+```ini
+server {
+    listen 80;
+    server_name site.localhost;
+    root /var/www/awesome-thing/app/webroot/;
+    fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/xhgui-branch/external/header.php";
+}
+```
+
+xhgui web server
+
+```ini
+server {
+
+    listen 80;
+
+    server_name xhgui.lo;
+    root /var/www/xhgui-branch/webroot;
+    index index.php index.html index.htm;
+
+    location / {
+        if (!-e $request_filename) {
+            rewrite . /index.php last;
+        }
+    }
+
+    location ~ \.php$ {
+        try_files $uri /index.php =404;
+        fastcgi_pass php-fpm7.2:9000;
+        fastcgi_index index.php;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+        fastcgi_split_path_info ^((?U).+\.php)(/?.+)$;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        include fastcgi_params;
+    }
 }
 ```
 

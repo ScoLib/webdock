@@ -281,6 +281,28 @@ RUN if [ ${INSTALL_YAML} = true ]; then \
 #     && docker-php-ext-enable yaml
 
 
+###########################################################################
+# tideways:
+###########################################################################
+
+ARG INSTALL_TIDEWAYS=false
+
+RUN if [ ${INSTALL_TIDEWAYS} = true ]; then \
+    curl -L -o /tmp/tideways.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v4.1.7.tar.gz" \
+    # && mkdir -p tideways \
+    && tar -zxvf /tmp/tideways.tar.gz \
+    && ( \
+        cd php-xhprof-extension-4.1.7 \
+        && phpize \
+        && ./configure \
+        && make -j$(nproc) \
+        && make install \
+    ) \
+    && rm -r php-xhprof-extension-4.1.7 \
+    && rm /tmp/tideways.tar.gz \
+    && echo "extension=tideways.so\ntideways.auto_prepend_library=0\ntideways.connection=tcp://tideways:9135" >> /usr/local/etc/php/conf.d/40-tideways.ini \
+;fi
+
 # Clean up
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
