@@ -13,6 +13,11 @@ APP_CODE_PATH_CONTAINER=/var/www
 # Choose storage path on your machine. For all storage systems
 DATA_SAVE_PATH=~/.webdock/data
 
+### Drivers ################################################
+
+# All Networks driver
+NETWORKS_DRIVER=bridge
+
 ### Docker Host IP #####################################################################################################
 # Enter your Docker Host IP (will be appended to /etc/hosts). Default is `10.0.75.1`
 
@@ -154,8 +159,6 @@ GRAFANA_PORT=3000
 ### MONGODB ############################################################################################################
 
 MONGODB_PORT=27017
-# MONGODB_USER=mongo
-# MONGODB_PASSWORD=mongo
 
 ### LEANOTE ############################################################################################################
 

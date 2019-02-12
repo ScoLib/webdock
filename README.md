@@ -23,7 +23,7 @@ xdebug.remote_connect_back=0 # 关闭
 
 ### Window 下 volumes 报错
 
-Window下使用时，使用 volumes 映射宿主机目录到 `/data/db`，会报如下错误：
+Window下使用时，使用 volumes 映射宿主机目录到 `/data/db`，会报如下`Operation not permitted`错误：
 
 ```sh
 2018-10-22T05:54:58.004+0000 I CONTROL  [main] Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'
@@ -54,9 +54,29 @@ Window下使用时，使用 volumes 映射宿主机目录到 `/data/db`，会报
 ***aborting after fassert() failure
 ```
 
-原因见： https://stackoverflow.com/questions/42756776/how-do-i-configure-mongo-to-run-in-docker-to-using-an-external-drive-on-windows
+#### 原因见 [mongo docker image documentation](https://hub.docker.com/_/mongo/)：
 
-**目前Windows只能暂时不用 volumes** 
+> **WARNING (Windows & OS X)**: The default Docker setup on Windows and OS X uses a VirtualBox VM to host the Docker daemon. Unfortunately, the mechanism VirtualBox uses to share folders between the host system and the Docker container is not compatible with the memory mapped files used by MongoDB (see [vbox bug](https://www.virtualbox.org/ticket/819), [docs.mongodb.org](https://docs.mongodb.com/manual/administration/production-notes/#fsync-on-directories) and related [jira.mongodb.org](https://jira.mongodb.org/browse/SERVER-8600) bug). This means that it is not possible to run a MongoDB container with the data directory mapped to the host.
+
+#### 解决
+
+创建 volume，docker-compose.yml 
+
+```
+version: '3'
+services:
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - mongodata:/data/db
+volumes:
+  mongodata:
+    driver: local
+```
+
+
+
+
 
 
 

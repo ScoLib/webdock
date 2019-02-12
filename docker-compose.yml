@@ -1,5 +1,11 @@
 version: "3.5"
 
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
 services:
 
 ### PHP-FPM 7.2 Container #########################################
@@ -274,14 +280,8 @@ services:
       # restart: always
       ports:
         - "${MONGODB_PORT}:27017"
-      expose:
-        - "27017"
       volumes:
         - ${DATA_SAVE_PATH}/mongo:/data/db
-      # environment: 
-        # - MONGO_INITDB_DATABASE=leanote
-        # - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
-        # - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
       networks:
         - backend
 
@@ -524,10 +524,3 @@ services:
       networks:
         - backend
 
-### Networks Setup ################################################
-
-networks:
-  frontend:
-    driver: "bridge"
-  backend:
-    driver: "bridge"
