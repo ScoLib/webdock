@@ -288,18 +288,19 @@ RUN if [ ${INSTALL_YAML} = true ]; then \
 ARG INSTALL_TIDEWAYS=false
 
 RUN if [ ${INSTALL_TIDEWAYS} = true ]; then \
-    curl -L -o /tmp/tideways.tar.gz "https://github.com/tideways/php-xhprof-extension/archive/v4.1.7.tar.gz" \
+    apt-get install -y unzip \
+    && curl -L -o /tmp/tideways.zip "https://github.com/tideways/php-xhprof-extension/archive/4.x.zip" \
     # && mkdir -p tideways \
-    && tar -zxvf /tmp/tideways.tar.gz \
+    && unzip -d /tmp/ /tmp/tideways.zip \
     && ( \
-        cd php-xhprof-extension-4.1.7 \
+        cd /tmp/php-xhprof-extension-4.x \
         && phpize \
         && ./configure \
         && make -j$(nproc) \
         && make install \
     ) \
-    && rm -r php-xhprof-extension-4.1.7 \
-    && rm /tmp/tideways.tar.gz \
+    # && rm -r /tmp/php-xhprof-extension-4.x \
+    # && rm /tmp/tideways.zip \
     && echo "extension=tideways.so\ntideways.auto_prepend_library=0\ntideways.connection=tcp://tideways:9135" >> /usr/local/etc/php/conf.d/40-tideways.ini \
 ;fi
 
