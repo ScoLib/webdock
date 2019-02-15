@@ -1,5 +1,5 @@
 ARG WEBDOCK_PHP_VERSION
-FROM scolib/php-fpm:1.0-${WEBDOCK_PHP_VERSION}-fpm
+FROM scolib/php:${WEBDOCK_PHP_VERSION}-fpm
 
 LABEL maintainer="klgd <slice1213@gmail.com>"
 
