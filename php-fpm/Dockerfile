@@ -304,6 +304,26 @@ RUN if [ ${INSTALL_TIDEWAYS} = true ]; then \
     && echo "extension=tideways.so\ntideways.auto_prepend_library=0\ntideways.connection=tcp://tideways:9135" >> /usr/local/etc/php/conf.d/40-tideways.ini \
 ;fi
 
+
+###########################################################################
+# SQLCipher
+###########################################################################
+
+ARG INSTALL_SQLCIPHER=false
+
+RUN if [ ${INSTALL_SQLCIPHER} = true ]; then \
+    export SQLITE_HAS_CODEC && \
+    export SQLITE_TEMP_STORE=2 && \
+    apt-get install -y git tcl && \
+    git clone https://github.com/sqlcipher/sqlcipher.git /tmp/sqlcipher && \
+    ( \
+      cd /tmp/sqlcipher && \
+      ./configure --enable-tempstore=yes CFLAGS="-DSQLITE_HAS_CODEC" LDFLAGS="-lcrypto" && \
+      make && make install \
+    ) && \
+    sqlcipher --version \
+;fi
+
 # Clean up
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \

@@ -36,6 +36,7 @@ services:
           - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
           - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
           - INSTALL_TIDEWAYS=${PHP_FPM_INSTALL_TIDEWAYS}
+          - INSTALL_SQLCIPHER=${PHP_FPM_INSTALL_SQLCIPHER}
       volumes:
         # - ./php-fpm/php72.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
@@ -77,6 +78,7 @@ services:
           - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
           - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
           - INSTALL_TIDEWAYS=${PHP_FPM_INSTALL_TIDEWAYS}
+          - INSTALL_SQLCIPHER=${PHP_FPM_INSTALL_SQLCIPHER}
       volumes:
         # - ./php-fpm/php71.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
@@ -118,6 +120,7 @@ services:
           - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
           - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
           - INSTALL_TIDEWAYS=${PHP_FPM_INSTALL_TIDEWAYS}
+          - INSTALL_SQLCIPHER=${PHP_FPM_INSTALL_SQLCIPHER}
       volumes:
         # - ./php-fpm/php70.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
@@ -159,6 +162,7 @@ services:
           - INSTALL_IMAP=${PHP_FPM_INSTALL_IMAP}
           - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
           - INSTALL_TIDEWAYS=${PHP_FPM_INSTALL_TIDEWAYS}
+          - INSTALL_SQLCIPHER=${PHP_FPM_INSTALL_SQLCIPHER}
       volumes:
         # - ./php-fpm/php56.ini:/usr/local/etc/php/php.ini
         - ./php-fpm/webdock.ini:/usr/local/etc/php/conf.d/webdock.ini
