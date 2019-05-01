@@ -82,23 +82,7 @@ volumes:
 
 ## Leanote
 
-### 导入数据库
-
-首次使用时，需要导入 `leanote` 的数据库
-
-```sh
-cp ./leanote/docker-entrypoint-initdb.d/init.sh.example ./leanote/docker-entrypoint-initdb.d/init.sh
-```
-
 **注意**：如果 docker-compose.yml 中映射了 mongodb_backup，请手动将 leanote_install_data 目录放到 宿主目录里，否则会导入失败
-
-### 映射配置
-
-```sh
-cp ./leanote/conf/app.conf.example ./leanote/conf/app.conf
-```
-
-并根据自己实际情况修改
 
 ### Nginx 代理
 
