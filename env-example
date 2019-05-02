@@ -21,6 +21,11 @@ DATA_SAVE_PATH=~/.webdock/data
 # All Networks driver
 NETWORKS_DRIVER=bridge
 
+### Phalcon Version ###########################################
+
+# Select a Phalcon version of the Workspace and PHP-FPM containers (Does not apply to HHVM). Accepted values: 3.4.0+
+PHALCON_VERSION=3.4.1
+
 ### Docker Host IP #####################################################################################################
 # Enter your Docker Host IP (will be appended to /etc/hosts). Default is `10.0.75.1`
 
@@ -213,6 +218,15 @@ JENKINS_HOME=./jenkins/jenkins_home
 ### GRAFANA ############################################################################################################
 
 GRAFANA_PORT=3000
+
+### BLACKFIRE #############################################
+
+# Create an account on blackfire.io. Don't enable blackfire and xDebug at the same time. # visit https://blackfire.io/docs/24-days/06-installation#install-probe-debian for more info.
+INSTALL_BLACKFIRE=false
+BLACKFIRE_CLIENT_ID=<client_id>
+BLACKFIRE_CLIENT_TOKEN=<client_token>
+BLACKFIRE_SERVER_ID=<server_id>
+BLACKFIRE_SERVER_TOKEN=<server_token>
 
 ### MONGODB ############################################################################################################
 
