@@ -134,6 +134,17 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
     docker-php-ext-enable amqp \
 ;fi
 
+
+###########################################################################
+# pcntl
+###########################################################################
+
+ARG INSTALL_PCNTL=false
+RUN if [ ${INSTALL_PCNTL} = true ]; then \
+    # Installs pcntl, helpful for running Horizon
+    docker-php-ext-install pcntl \
+;fi
+
 #####################################
 # GMP (GNU Multiple Precision):
 #####################################
