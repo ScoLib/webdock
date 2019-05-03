@@ -4,8 +4,6 @@ LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
 COPY nginx.conf /etc/nginx/
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/' /etc/apk/repositories
-
 RUN apk update \
     && apk upgrade \
     && apk add --no-cache openssl \
