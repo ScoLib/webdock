@@ -265,7 +265,7 @@ services:
         - ${NGINX_PATH}/conf.d/default.conf:/etc/nginx/conf.d/default.conf
         - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
         - ${NGINX_PATH}/sites:/etc/nginx/sites-available
-        - ${NGINX_PATH}/certs:/etc/nginx/certs
+        - ${NGINX_CERT_PATH}:/etc/nginx/certs
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
       ports:
         - "${NGINX_HOST_HTTP_PORT}:80"
