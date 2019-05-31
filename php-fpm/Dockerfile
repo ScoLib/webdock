@@ -376,6 +376,8 @@ RUN if [ ${INSTALL_SQLCIPHER} = true ]; then \
     sqlcipher --version \
 ;fi
 
+USER root
+
 # Clean up
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
@@ -392,7 +394,7 @@ RUN apt-get clean && \
 # COPY ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/
 
 
-# RUN apk --no-cache add shadow && usermod -u 1000 www-data
+RUN usermod -u 1000 www-data
 
 WORKDIR /var/www
 
