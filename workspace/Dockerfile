@@ -12,14 +12,13 @@
 # Note: Base Image name format {image-tag}-{php-version}
 #
 
-ARG LARADOCK_PHP_VERSION
+ARG WEBDOCK_PHP_VERSION
 
-# FROM laradock/workspace:2.2-${LARADOCK_PHP_VERSION}
-FROM letsdockerize/laradock-workspace:2.4-${LARADOCK_PHP_VERSION}
+FROM laradock/workspace:2.5-${WEBDOCK_PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
-ARG LARADOCK_PHP_VERSION
+ARG WEBDOCK_PHP_VERSION
 
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
@@ -59,7 +58,7 @@ RUN set -xe; \
       # next lines are here becase there is no auto build on dockerhub see https://github.com/laradock/laradock/pull/1903#issuecomment-463142846
       libzip-dev zip unzip \
       # Install the zip extension
-      php${LARADOCK_PHP_VERSION}-zip \
+      php${WEBDOCK_PHP_VERSION}-zip \
       # nasm
       nasm && \
       php -m | grep -q 'zip'
@@ -124,6 +123,10 @@ COPY ./auth.json /home/webdock/.composer/auth.json
 # Make sure that ~/.composer belongs to webdock
 RUN chown -R webdock:webdock /home/webdock/.composer
 
+# Export composer vendor path
+RUN echo "" >> ~/.bashrc && \
+    echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
+
 USER webdock
 
 # Check if global install need to be ran
@@ -185,7 +188,7 @@ ARG INSTALL_SSH2=false
 
 RUN if [ ${INSTALL_SSH2} = true ]; then \
   # Install the PHP SSH2 extension
-  apt-get -y install libssh2-1-dev php${LARADOCK_PHP_VERSION}-ssh2 \
+  apt-get -y install libssh2-1-dev php${WEBDOCK_PHP_VERSION}-ssh2 \
 ;fi
 
 ###########################################################################
@@ -195,11 +198,11 @@ RUN if [ ${INSTALL_SSH2} = true ]; then \
 USER root
 
 ARG INSTALL_GMP=false
-ARG PHP_VERSION=${LARADOCK_PHP_VERSION}
+ARG PHP_VERSION=${WEBDOCK_PHP_VERSION}
 
 RUN if [ ${INSTALL_GMP} = true ]; then \
   # Install the PHP GMP extension
-  apt-get -y install php${LARADOCK_PHP_VERSION}-gmp \
+  apt-get -y install php${WEBDOCK_PHP_VERSION}-gmp \
 ;fi
 
 ###########################################################################
@@ -212,7 +215,7 @@ ARG INSTALL_SOAP=false
 
 RUN if [ ${INSTALL_SOAP} = true ]; then \
   # Install the PHP SOAP extension
-  apt-get -y install libxml2-dev php${LARADOCK_PHP_VERSION}-soap \
+  apt-get -y install libxml2-dev php${WEBDOCK_PHP_VERSION}-soap \
 ;fi
 
 
@@ -224,7 +227,7 @@ ARG INSTALL_LDAP=false
 
 RUN if [ ${INSTALL_LDAP} = true ]; then \
     apt-get install -y libldap2-dev && \
-    apt-get install -y php${LARADOCK_PHP_VERSION}-ldap \
+    apt-get install -y php${WEBDOCK_PHP_VERSION}-ldap \
 ;fi
 
 ###########################################################################
@@ -234,7 +237,7 @@ RUN if [ ${INSTALL_LDAP} = true ]; then \
 ARG INSTALL_IMAP=false
 
 RUN if [ ${INSTALL_IMAP} = true ]; then \
-    apt-get install -y php${LARADOCK_PHP_VERSION}-imap \
+    apt-get install -y php${WEBDOCK_PHP_VERSION}-imap \
 ;fi
 
 ###########################################################################
@@ -260,17 +263,16 @@ ARG INSTALL_XDEBUG=false
 
 RUN if [ ${INSTALL_XDEBUG} = true ]; then \
     # Load the xdebug extension only with phpunit commands
-    apt-get install -y php${LARADOCK_PHP_VERSION}-xdebug && \
-    sed -i 's/^;//g' /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-xdebug.ini && \
-    echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/vendor/bin/phpunit'" >> ~/.bashrc \
+    apt-get install -y php${WEBDOCK_PHP_VERSION}-xdebug && \
+    sed -i 's/^;//g' /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/20-xdebug.ini \
 ;fi
 
 # ADD for REMOTE debugging
-COPY ./xdebug.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/xdebug.ini
+COPY ./xdebug.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/xdebug.ini
 
-RUN sed -i "s/xdebug.remote_autostart=0/xdebug.remote_autostart=1/" /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/xdebug.ini && \
-    sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/xdebug.ini && \
-    sed -i "s/xdebug.cli_color=0/xdebug.cli_color=1/" /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/xdebug.ini
+RUN sed -i "s/xdebug.remote_autostart=0/xdebug.remote_autostart=1/" /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/xdebug.ini && \
+    sed -i "s/xdebug.remote_enable=0/xdebug.remote_enable=1/" /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/xdebug.ini && \
+    sed -i "s/xdebug.cli_color=0/xdebug.cli_color=1/" /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/xdebug.ini
 
 ###########################################################################
 # Phpdbg:
@@ -282,7 +284,7 @@ RUN sed -i "s/xdebug.remote_autostart=0/xdebug.remote_autostart=1/" /etc/php/${L
 
 # RUN if [ ${INSTALL_PHPDBG} = true ]; then \
 #     # Load the xdebug extension only with phpunit commands
-#     apt-get install -y --force-yes php${LARADOCK_PHP_VERSION}-phpdbg \
+#     apt-get install -y --force-yes php${WEBDOCK_PHP_VERSION}-phpdbg \
 # ;fi
 
 ###########################################################################
@@ -296,7 +298,7 @@ ARG BLACKFIRE_CLIENT_TOKEN
 ENV BLACKFIRE_CLIENT_TOKEN ${BLACKFIRE_CLIENT_TOKEN}
 
 RUN if [ ${INSTALL_XDEBUG} = false -a ${INSTALL_BLACKFIRE} = true ]; then \
-    curl -L https://packagecloud.io/gpg.key | apt-key add - && \
+    curl -L https://packages.blackfire.io/gpg.key | apt-key add - && \
     echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
     apt-get update -yqq && \
     apt-get install blackfire-agent \
@@ -333,12 +335,12 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
     # Install the mongodb extension
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
       pecl install mongo && \
-      echo "extension=mongo.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/mongo.ini && \
-      ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/mongo.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/30-mongo.ini \
+      echo "extension=mongo.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/mongo.ini && \
+      ln -s /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/mongo.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/30-mongo.ini \
     ;fi && \
     pecl install mongodb && \
-    echo "extension=mongodb.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/mongodb.ini && \
-    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/mongodb.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/30-mongodb.ini \
+    echo "extension=mongodb.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/mongodb.ini && \
+    ln -s /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/mongodb.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/30-mongodb.ini \
 ;fi
 
 ###########################################################################
@@ -350,8 +352,8 @@ ARG INSTALL_AMQP=false
 RUN if [ ${INSTALL_AMQP} = true ]; then \
     apt-get install librabbitmq-dev -y && \
     pecl -q install amqp && \
-    echo "extension=amqp.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/amqp.ini && \
-    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/amqp.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/30-amqp.ini \
+    echo "extension=amqp.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/amqp.ini && \
+    ln -s /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/amqp.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/30-amqp.ini \
 ;fi
 
 ###########################################################################
@@ -361,6 +363,7 @@ RUN if [ ${INSTALL_AMQP} = true ]; then \
 ARG INSTALL_PHPREDIS=false
 
 RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
+    apt-get update -yqq && \
     apt-get install -yqq php-redis \
 ;fi
 
@@ -381,9 +384,25 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
         pecl install swoole; \
       fi \
     fi && \
-    echo "extension=swoole.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini && \
-    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/swoole.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-swoole.ini \
+    echo "extension=swoole.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/swoole.ini && \
+    ln -s /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/swoole.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/20-swoole.ini \
     && php -m | grep -q 'swoole' \
+;fi
+
+###########################################################################
+# Taint EXTENSION
+###########################################################################
+
+ARG INSTALL_TAINT=false
+
+RUN if [ "${INSTALL_TAINT}" = true ]; then \
+    # Install Php TAINT Extension
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
+      pecl install taint && \
+      echo "extension=taint.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/taint.ini && \
+      ln -s /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/taint.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/20-taint.ini && \
+      php -m | grep -q 'taint'; \
+    fi \
 ;fi
 
 ###########################################################################
@@ -405,8 +424,8 @@ ARG INSTALL_INOTIFY=false
 
 RUN if [ ${INSTALL_INOTIFY} = true ]; then \
     pecl -q install inotify && \
-    echo "extension=inotify.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/inotify.ini && \
-    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/inotify.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-inotify.ini \
+    echo "extension=inotify.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/inotify.ini && \
+    ln -s /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/inotify.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/20-inotify.ini \
 ;fi
 
 ###########################################################################
@@ -432,8 +451,8 @@ RUN if [ ${INSTALL_IONCUBE} = true ]; then \
     # Install the php ioncube loader
     curl -L -o /tmp/ioncube_loaders_lin_x86-64.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar zxpf /tmp/ioncube_loaders_lin_x86-64.tar.gz -C /tmp \
-    && mv /tmp/ioncube/ioncube_loader_lin_${LARADOCK_PHP_VERSION}.so $(php -r "echo ini_get('extension_dir');")/ioncube_loader.so \
-    && echo "zend_extension=ioncube_loader.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/0ioncube.ini \
+    && mv /tmp/ioncube/ioncube_loader_lin_${WEBDOCK_PHP_VERSION}.so $(php -r "echo ini_get('extension_dir');")/ioncube_loader.so \
+    && echo "zend_extension=ioncube_loader.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/0ioncube.ini \
     && rm -rf /tmp/ioncube* \
 ;fi
 
@@ -570,7 +589,7 @@ RUN set -xe; \
     else \
       pecl install v8js; \
     fi \
-    && echo "extension=v8js.so" >> /etc/php/${LARADOCK_PHP_VERSION}/cli/php.ini \
+    && echo "extension=v8js.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/cli/php.ini \
     && php -m | grep -q 'v8js' \
   ;fi
 
@@ -694,8 +713,8 @@ RUN set -eux; \
       ;else \
         pecl install sqlsrv pdo_sqlsrv \
       ;fi && \
-      echo "extension=sqlsrv.so"     > /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-sqlsrv.ini && \
-      echo "extension=pdo_sqlsrv.so" > /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/20-pdo_sqlsrv.ini \
+      echo "extension=sqlsrv.so"     > /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/20-sqlsrv.ini && \
+      echo "extension=pdo_sqlsrv.so" > /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/20-pdo_sqlsrv.ini \
       && php -m | grep -q 'sqlsrv' \
       && php -m | grep -q 'pdo_sqlsrv' \
     ;fi \
@@ -843,17 +862,17 @@ RUN if [ ${INSTALL_DUSK_DEPS} = true ]; then \
 ###########################################################################
 
 ARG INSTALL_PHALCON=false
-ARG LARADOCK_PHALCON_VERSION
-ENV LARADOCK_PHALCON_VERSION ${LARADOCK_PHALCON_VERSION}
+ARG WEBDOCK_PHALCON_VERSION
+ENV WEBDOCK_PHALCON_VERSION ${WEBDOCK_PHALCON_VERSION}
 
 RUN if [ $INSTALL_PHALCON = true ]; then \
     apt-get update && apt-get install -y unzip libpcre3-dev gcc make re2c \
-    && curl -L -o /tmp/cphalcon.zip https://github.com/phalcon/cphalcon/archive/v${LARADOCK_PHALCON_VERSION}.zip \
+    && curl -L -o /tmp/cphalcon.zip https://github.com/phalcon/cphalcon/archive/v${WEBDOCK_PHALCON_VERSION}.zip \
     && unzip -d /tmp/ /tmp/cphalcon.zip \
-    && cd /tmp/cphalcon-${LARADOCK_PHALCON_VERSION}/build \
+    && cd /tmp/cphalcon-${WEBDOCK_PHALCON_VERSION}/build \
     && ./install \
-    && echo "extension=phalcon.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/phalcon.ini \
-    && ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/phalcon.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/30-phalcon.ini \
+    && echo "extension=phalcon.so" >> /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/phalcon.ini \
+    && ln -s /etc/php/${WEBDOCK_PHP_VERSION}/mods-available/phalcon.ini /etc/php/${WEBDOCK_PHP_VERSION}/cli/conf.d/30-phalcon.ini \
     && rm -rf /tmp/cphalcon* \
 ;fi
 
@@ -868,6 +887,19 @@ ARG INSTALL_MYSQL_CLIENT=false
 RUN if [ ${INSTALL_MYSQL_CLIENT} = true ]; then \
     apt-get update -yqq && \
     apt-get -y install mysql-client \
+;fi
+
+###########################################################################
+# ping:
+###########################################################################
+
+USER root
+
+ARG INSTALL_PING=false
+
+RUN if [ ${INSTALL_PING} = true ]; then \
+    apt-get update -yqq && \
+    apt-get -y install inetutils-ping \
 ;fi
 
 ###########################################################################
@@ -886,7 +918,7 @@ RUN if [ ${INSTALL_FFMPEG} = true ]; then \
 # Check PHP version:
 ###########################################################################
 
-RUN set -xe; php -v | head -n 1 | grep -q "PHP ${LARADOCK_PHP_VERSION}."
+RUN set -xe; php -v | head -n 1 | grep -q "PHP ${WEBDOCK_PHP_VERSION}."
 
 #
 #--------------------------------------------------------------------------

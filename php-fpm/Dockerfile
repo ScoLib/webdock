@@ -103,6 +103,22 @@ RUN if [ ${INSTALL_SWOOLE} = true ]; then \
       fi \
     fi && \
     docker-php-ext-enable swoole \
+    && php -m | grep -q 'swoole' \
+;fi
+
+###########################################################################
+# Taint EXTENSION
+###########################################################################
+
+ARG INSTALL_TAINT=false
+
+RUN if [ ${INSTALL_TAINT} = true ]; then \
+    # Install Php TAINT Extension
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "7" ]; then \
+      pecl install taint && \
+      docker-php-ext-enable taint && \
+      php -m | grep -q 'taint'; \
+    fi \
 ;fi
 
 ###########################################################################
@@ -152,9 +168,10 @@ RUN if [ ${INSTALL_PCNTL} = true ]; then \
 ARG INSTALL_GMP=false
 RUN if [ ${INSTALL_GMP} = true ]; then \
     # Install the GMP extension
-	apk update && \
-    # apk upgrade && \
-    apk add --no-cache gmp-dev && \ 
+	  apt-get install -y libgmp-dev && \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
+    ;fi && \
     docker-php-ext-install gmp \
 ;fi
 
@@ -319,18 +336,14 @@ USER root
 ARG INSTALL_YAML=false
 
 RUN if [ ${INSTALL_YAML} = true ]; then \
-    apt-get install libyaml-dev -y \
-    && pecl install yaml \
-    && docker-php-ext-enable yaml \
+    apt-get install libyaml-dev -y ; \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+        pecl install -a yaml-1.3.2; \
+    else \
+        pecl install yaml; \
+    fi && \
+    docker-php-ext-enable yaml \
 ;fi
-
-#####################################
-# YAML:
-#####################################
-
-# RUN apt-get install libyaml-dev -y \
-#     && pecl install yaml-1.3.1 \
-#     && docker-php-ext-enable yaml
 
 
 ###########################################################################
@@ -366,10 +379,12 @@ ARG INSTALL_SQLCIPHER=false
 RUN if [ ${INSTALL_SQLCIPHER} = true ]; then \
     export SQLITE_HAS_CODEC && \
     export SQLITE_TEMP_STORE=2 && \
-    apt-get install -y git tcl && \
-    git clone https://github.com/sqlcipher/sqlcipher.git /tmp/sqlcipher && \
+    apt-get install -y tcl && \
+    curl -L -o /tmp/sqlcipher.tar.gz "https://github.com/sqlcipher/sqlcipher/archive/v4.2.0.tar.gz" && \
+    tar zxpf /tmp/sqlcipher.tar.gz -C /tmp && \
+    # git clone -v https://github.com/sqlcipher/sqlcipher.git /tmp/sqlcipher && \
     ( \
-      cd /tmp/sqlcipher && \
+      cd /tmp/sqlcipher-4.2.0 && \
       ./configure --enable-tempstore=yes CFLAGS="-DSQLITE_HAS_CODEC" LDFLAGS="-lcrypto" && \
       make && make install \
     ) && \
