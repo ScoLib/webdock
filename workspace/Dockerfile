@@ -14,7 +14,7 @@
 
 ARG WEBDOCK_PHP_VERSION
 
-FROM laradock/workspace:2.5-${WEBDOCK_PHP_VERSION}
+FROM laradock/workspace:2.6.1-${WEBDOCK_PHP_VERSION}
 
 LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
